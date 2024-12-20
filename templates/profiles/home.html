@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="personalization-form">
+    <h2>Личный кабинет {{ request.user.username }}</h2>
+    <p>{{ request.user.profile.log }}</p>
+
+    <h2>Ваши покупки</h2>
+    {% if request.user.profile.get_products %}
+        {% for profile_product in request.user.profile.get_products %}
+            <p>
+                <a href="{% url 'profile_product' profile_product.product.id %}" class="product-link">
+                    {{ profile_product.product.title }}
+                </a>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>У вас еще нет покупок.</p>
+    {% endif %}
+
+    <div class="col-md-4 text-center mt-3">
+        <a href="{% url 'change_password' %}" class="btn btn-warning">Сменить пароль</a>
+        <a href="{% url 'logout' %}" class="submit-button">Выйти</a>
+    </div>
+</div>
+
+
+{% endblock %}
+

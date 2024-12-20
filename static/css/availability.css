@@ -1,0 +1,110 @@
+:root{
+    --color-1: #383838;
+    --color-2: #6e6e6e;
+    --color-3: #ffffff;
+    --color-4: #ffffff;
+    --color-5: #000000;
+    --color-6: #2bff00;
+    --color-7: #0400ff;
+}
+.back-button {
+    text-decoration: none;
+    font-size: 16px;
+    color: blue;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+.servicer{
+    max-width: 1920px;
+}
+.availability_block{
+    text-align: center;
+    font-size: 50px;
+    color: var(--color-3);
+}
+.availability_block_img{
+    margin-bottom: 50px;
+}
+.availability_container{
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+
+}
+.availability_container_1{
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+}
+.availability_img{
+    width: 900px;
+    height: 900px;
+}
+.availability_img_1{
+    width: 1860px;
+    height: 800px;
+}
+
+.availability_text1{
+    position: absolute;
+    top: 72%;
+    left: 6%;
+    font-size: 45px;
+    font-style: italic;
+    color: var(--color-3);
+}
+.availability_text2{
+    position: absolute;
+    top: 72%;
+    left: 56%;
+    font-size: 45px;
+    font-style: italic;
+    color: var(--color-3);
+}
+.availability_text3{
+    position: absolute;
+    top: 70%;
+    left: 38%;
+    font-size: 45px;
+    font-style: italic;
+    color: var(--color-3);
+}
+.button1{
+    position: absolute;
+    top: 84%;
+    left: 18%;
+    font-size: 30px;
+    color: var(--color-5);
+    background-color: var(--color-6);
+    cursor: pointer;
+    width: 250px;
+    height: 60px;
+    border: none;
+}
+.button2{
+    position: absolute;
+    top: 84%;
+    left: 70%;
+    font-size: 30px;
+    color: var(--color-5);
+    background-color: var(--color-6);
+    cursor: pointer;
+    width: 250px;
+    height: 60px;
+    border: none;
+}
+.availability_a3{
+    position: absolute;
+    top: 80%;
+    left: 38%;
+    font-size: 40px;
+    font-style: italic;
+    color: var(--color-3);
+}
+.availability_a3:hover{
+    color: var(--color-6);
+}
+.availability_a3:active{
+    color: var(--color-2);
+}

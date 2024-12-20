@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <h6>Выберите номинал подарочного сертификата</h6>
+    <div class="certificate-options">
+        <form id="certificate-form" method="POST" action="{% url 'certificate' %}" onsubmit="return validateForm()">
+            {% csrf_token %}
+
+            <!-- Основные сертификаты -->
+            <div class="row">
+                <div class="certificate-card" onclick="selectCertificate('certificate-5000')">
+                    <img class="certificate-image" src="{% static 'img/card.jpg' %}" alt="5000 Р">
+                    <input type="radio" id="certificate-5000" name="amount" value="5000" required>
+                    <div class="certificate-content">
+                        <h3 class="custom-amount-title">5000 р.</h3>
+                    </div>
+                </div>
+                <div class="certificate-card" onclick="selectCertificate('certificate-10000')">
+                    <img class="certificate-image" src="{% static 'img/card.jpg' %}" alt="10000 Р">
+                    <input type="radio" id="certificate-10000" name="amount" value="10000" required>
+                    <div class="certificate-content">
+                        <h3 class="custom-amount-title">10000 р.</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="certificate-card" onclick="selectCertificate('certificate-15000')">
+                    <img class="certificate-image" src="{% static 'img/card.jpg' %}" alt="15000 Р">
+                    <input type="radio" id="certificate-15000" name="amount" value="15000" required>
+                    <div class="certificate-content">
+                        <h3 class="custom-amount-title">15000 р.</h3>
+                    </div>
+                </div>
+                <div class="certificate-card" onclick="selectCertificate('certificate-custom')">
+                    <input type="radio" id="certificate-custom" name="amount" value="custom" required>
+                    <div class="certificate-card">
+                        <img class="certificate-image" src="{% static 'img/card.jpg' %}" alt="Свой номинал">
+                        <div class="certificate-content">
+                            <h3 class="custom-amount-title">Свой номинал:</h3>
+                            <input type="text" id="custom-amount" name="custom_amount" placeholder="Введите сумму" required class="custom-amount-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form_class">
+                <input class="form_class2" type="submit" value="Продолжить">
+            </div>
+        </form>
+    </div>
+
+<style>
+h6 {
+    text-align: center;
+    color: #ffffff;
+    margin-top: 40px;
+    margin-bottom: 35px;
+    font-size: 30px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.certificate-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+    margin: 30px 0;
+}
+
+.certificate-card {
+    flex: 0 44%;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    transition: transform 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    height: 220px;
+}
+
+.certificate-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.certificate-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #000;
+    text-align: center;
+    z-index: 1;
+}
+
+.certificate-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+.form_class {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.form_class2 {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.form_class2:hover {
+    background-color: #218838;
+}
+
+.custom-amount-title {
+    font-size: 20px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.custom-amount-input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.custom-amount-input:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+    .certificate-card {
+        flex: 1;
+        margin: 10px 0;
+        height: 150px;
+    }
+}
+</style>
+
+
+<script>
+function selectCertificate(id) {
+    const radioButton = document.getElementById(id);
+    radioButton.checked = true;
+
+    const allCards = document.querySelectorAll('.certificate-card');
+    allCards.forEach(card => {
+        card.style.border = '1px solid #ddd'; // Сброс стилей
+        card.style.transform = 'scale(1)'; // Сброс эффекта увеличения
+    });
+
+    // Подсвечиваем выбранную карточку
+    radioButton.parentElement.style.border = '2px solid blue';
+    radioButton.parentElement.style.transform = 'scale(1.03)';
+
+    // Если выбрано значение "Свой номинал", очищаем значение
+    if (id === 'certificate-custom') {
+        document.getElementById('custom-amount').required = true;
+    } else {
+        document.getElementById('custom-amount').value = ''; // Очищаем поле
+        document.getElementById('custom-amount').required = false;
+    }
+}
+
+function validateForm() {
+    const customAmountInput = document.getElementById('custom-amount');
+    const customRadio = document.getElementById('certificate-custom');
+    const radioButtons = document.getElementsByName('amount');
+    let atLeastOneChecked = false;
+
+    for (const radioButton of radioButtons) {
+        if (radioButton.checked) {
+            atLeastOneChecked = true;
+            break;
+        }
+    }
+
+    if (!atLeastOneChecked) {
+        alert("Пожалуйста, выберите один из номиналов.");
+        return false;
+    }
+
+    if (customRadio.checked) {
+        const customValue = customAmountInput.value.trim();
+        if (!customValue || isNaN(customValue) || Number(customValue) <= 0) {
+            alert("Пожалуйста, введите корректную сумму для собственного номинала.");
+            return false;
+        }
+    }
+
+    return true;
+}
+</script>
+
+{% endblock %}

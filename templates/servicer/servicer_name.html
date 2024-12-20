@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <h1 class="servicer_block">Услуги</h1>
+    <div class="servicer_block_container">
+        <div class="servicer_block_img">
+            <h1 class="servicer_text1">Апгрейд центр</h1>
+            <a class="servicer_a1" href="{% url 'upgrade_center' %}">Узнать больше...</a>
+            <img class="servicer_img" src="{% static 'img/service1.jpg' %}" alt="Апгрейд центр">
+        </div>
+        <div class="servicer_block_img">
+            <h1 class="servicer_text2">Ремонт и диагностика</h1>
+            <a class="servicer_a2" href="{% url 'repair_center' %}">Узнать больше...</a>
+            <img class="servicer_img" src="{% static 'img/service2.jpg' %}" alt="Ремонт и диагностика">
+        </div>
+        <div class="servicer_block_img">
+            <h1 class="servicer_text3">Трейд-ин</h1>
+            <a class="servicer_a3" href="{% url 'trade_in' %}">Узнать больше...</a>
+            <img class="servicer_img" src="{% static 'img/service3.jpg' %}" alt="Трейд-ин">
+        </div>
+        <div class="servicer_block_img">
+            <h1 class="servicer_text4">Персонализация ПК</h1>
+            <a class="servicer_a4" href="{% url 'personalization' %}">Узнать больше...</a>
+            <img class="servicer_img" src="{% static 'img/service4.jpg' %}" alt="Персонализация ПК">
+        </div>
+    </div>
+
+{% endblock %}

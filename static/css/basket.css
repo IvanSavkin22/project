@@ -1,0 +1,37 @@
+.text-basket{
+    text-align: center;
+    color: #ffffff;
+    margin-top: 50px;
+    margin-bottom: 35px;
+    font-size: 30px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.text-button {
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 25px
+}
+.text-button-off{
+    display: flex;
+    justify-content: space-around;
+}
+.text-center {
+    text-align: center;
+    margin-top: 20px;
+}
+.text-danger {
+    color: #ffffff;
+    font-size: 20px;
+    padding: 15px;
+    margin: 20px 0;
+    text-align: center;
+}
+

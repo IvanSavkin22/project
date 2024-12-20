@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<form method="post" class="personalization-form">
+    <h2>Персонализация ПК</h2>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="submit-button">Оформить заявку</button>
+</form>
+
+{% endblock %}

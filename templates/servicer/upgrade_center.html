@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+
+<div class="button-container">
+    <a href="{% url 'servicer_name' %}" class="back-button_link">← Назад к услугам</a>
+</div>
+
+<h1>Апгрейд центр</h1>
+
+<div class="filter-container">
+    <button id="filter-button" class="btn btn-custom-primary" data-toggle="modal" data-target="#filter-modal">Фильтры</button>
+</div>
+
+
+<!-- Модальное окно с фильтрами -->
+<div id="filter-modal" class="modal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="custom-modal-dialog" role="document">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <h5 class="custom-modal-title">Фильтры</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="custom-modal-body">
+                <form id="custom-modal-body">
+                    <div class="custom-form-group">
+                        <label for="min-price">Минимальная цена</label>
+                        <input type="number" class="form-control" id="min-price" name="min_price" placeholder="0">
+                    </div>
+                    <div class="custom-form-group">
+                        <label for="max-price">Максимальная цена</label>
+                        <input type="number" class="form-control" id="max-price" name="max_price" placeholder="10000">
+                    </div>
+                    <div class="custom-form-group">
+                        <label for="sort-order">Сортировать по</label>
+                        <select class="form-control" id="sort-order" name="sort_order">
+                            <option value="name_asc">Имя (А-Я)</option>
+                            <option value="name_desc">Имя (Я-А)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-custom-primary">Применить фильтры</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="notification" class="notification" style="display: none;"></div>
+
+<div class="row parts-list">
+    {% for part in parts_pc %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="part-image">
+                    {% if part.image %}
+                        <img src="{{ part.image.url }}" alt="{{ part.name }}" class="card-img-top part-thumbnail"/>
+                    {% else %}
+                        <img src="{% static 'default_image.png' %}" alt="Default Image" class="card-img-top part-thumbnail"/>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h3 class="part-name">{{ part.name }}</h3>
+                    <span class="part-price">{{ part.price|floatformat:0 }} р.</span>
+                    <p class="part-description">{{ part.description }}</p>
+                    <form action="{% url 'upgrade_center' part.id %}" method="post" class="add-to-upgrade-form" data-part-id="{{ part.id }}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success add-to-cart">Добавить в корзину</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a class="pagination-link" href="?page=1{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">&laquo; Первая</a>
+            <a class="pagination-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a class="pagination-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">Следующая</a>
+            <a class="pagination-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">Последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#filter-button').on('click', function() {
+        $('#filter-modal').modal('show'); // Открытие окна
+    });
+
+    $('#custom-filter-form').on('submit', function(e) {
+        e.preventDefault(); // Отмена
+
+        var minPrice = parseFloat($('#min-price').val());
+        var maxPrice = parseFloat($('#max-price').val());
+
+        // Проверка по цене
+        if (minPrice > maxPrice) {
+            alert("Минимальная цена не может превышать максимальную.");
+            return;
+        }
+
+        var formData = $(this).serialize(); // Получаем данные формы
+
+        //  AJAX-запрос для получения отфильтрованных деталей
+        $.ajax({
+            type: 'GET',
+            url: '{% url "upgrade_center" %}',
+            data: formData + '&page=1',
+            success: function(response) {
+                $('.parts-list').html(response);
+                $('#filter-modal').modal('hide'); // Закрываем модальное если фильтр применился
+            },
+            error: function() {
+                alert('Ошибка при применении фильтров. Попробуйте позже.');
+            }
+        });
+    });
+});
+
+    // Обработка добавления детали в корзину
+    $('.add-to-upgrade-form').on('submit', function(e) {
+        e.preventDefault();
+
+        var partId = $(this).data('part-id'); // Получаем ID детали
+        var token = $(this).find('[name="csrfmiddlewaretoken"]').val(); // Получаем токен CSRF
+
+        $.post('/basket/upgrade_center/' + partId + '/', { csrfmiddlewaretoken: token }, function(data) {
+            $('#notification').text(data.message).fadeIn().delay(3000).fadeOut();
+            $('#basket-count').text(data.total_items); // Обновление количества в корзине
+        }).fail(function() {
+            alert('Ошибка при добавлении детали в корзину. Попробуйте позже.');
+        });
+    });
+</script>
+
+{% endblock %}

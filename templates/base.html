@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/availability.css' %}">
+    <link rel="stylesheet" href="{% static 'css/servicer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gift_cards.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal_login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/trade_in.css' %}">
+    <link rel="stylesheet" href="{% static 'css/upgrade.css' %}">
+
+</head>
+<body>
+<header class="header">
+    <div class="header_container">
+        <a href="#" id="logo">
+            <img class="logo" src="{% static 'img/komp.svg' %}" alt="logo">
+        </a>
+    <div class="header_right">
+        <nav class="header_nav">
+            <ul class="header_list">
+                <li class="header_nav-item">
+                    <a class="header_nav-link" href="{% url 'main' %}">Главная</a>
+                </li>
+                <li class="header_nav-item" id="services-item"
+                    onmouseover="showTooltip('services-tooltip')" onmouseout="hideTooltip('services-tooltip')">
+                    <a class="header_nav-link" href="{% url 'servicer_name' %}">Услуги</a>
+                    <div class="tooltip" id="services-tooltip" style="display:none;">
+                        <ul>
+                            {% for service in services %}
+                                <li><a href="{% url service.url %}">{{ service.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+                <li class="header_nav-item" id="categories-item"
+                    onmouseover="showTooltip('categories-tooltip')" onmouseout="hideTooltip('categories-tooltip')">
+                    <a class="header_nav-link" id="all-models-link" href="{% url 'all_categories' %}">Категории</a>
+                    <div class="tooltip" id="categories-tooltip" style="display:none;">
+                        <ul>
+                            {% for category in categories %}
+                                <li><a href="{% url 'category' category.id %}">{{ category.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+                <li class="header_nav-item">
+                    <a class="header_nav-link" href="{% url 'certificate' %}">Карты</a>
+                </li>
+                <li class="header_nav-item">
+                    {% if request.user.is_authenticated %}
+                        <a class="header_nav-link" href="{% url 'home' %}">Личный кабинет</a>
+                        <a class="header_nav-link" href="{% url 'logout' %}">Выход</a>
+                    {% else %}
+                        <a class="header_nav-link" href="{% url 'login' %}">Вход</a>
+                        <a class="header_nav-link" href="{% url 'register' %}">Регистрация</a>
+                    {% endif %}
+                    <a class="header_nav-link" href="{% url 'basket_detail' %}">Корзина <span
+                        id="basket-count">{{ request.basket.basket_lines.all|length }}</span></a>
+                </li>
+            </ul>
+        </nav>
+</header>
+
+    <main class="main">
+
+        {% block content %}
+        {% endblock %}
+
+        {% if request.path == '/' %}
+        <section class="preview" id="slider-section">
+            <!-- Slider main container -->
+<div class="swiper">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      <div class="swiper-slide">
+        <h1 class="swiper__heading">Производительность следующего уровня</h1>
+        <img class="swiper__image" src="{% static 'img/slide1.jpg' %}" alt="slide1">
+        <button class="button">ПОДРОБНЕЕ</button>
+      </div>
+      <div class="swiper-slide">
+        <h1 class="swiper__heading">Доставка, установка и настройка компьютера под ключ</h1>
+        <img class="swiper__image" src="{% static 'img/slide2.jpg' %}" alt="slide2">
+        <button class="button">ПОДРОБНЕЕ</button>
+      </div>
+      <div class="swiper-slide">
+        <h1 class="swiper__heading">Только лучшие комплектующие и передовые технологии</h1>
+        <img class="swiper__image" src="{% static 'img/slide3.jpg' %}" alt="slide3">
+        <button class="button">ПОДРОБНЕЕ</button>
+      </div>
+
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+    <!-- If we need scrollbar -->
+    <div class="swiper-scrollbar"></div>
+</div>
+<section class="about_us" id="about_us">
+    <div class="about_us_container">
+        <h1 class="about_us_heading">Компания</h1>
+        <p class="about_us_text">
+            Компания была основана в 2015 году. Мы — официальный партнер таких известных технологических гигантов как NVIDIA, Intel, Microsoft. Нам также удалось реализовать несколько успешных совместных проектов с такими известными игровыми кампаниями как Wargaming, UbiSoft, Electronic Arts, Bethesda и Mail.Games.
+            Главный офис и производственный центр расположены в городе Екатеринбург. Шоурум с компьютерами и периферией находятся в Екатеринбурге. Мы осуществляем доставку компьютеров по всей России и миру. Наша компания работает как с частными, так и с юридическими лицами.
+        </p>
+        <div class="about_us_bottom">
+            <!-- Первый уровень: фото слева, текст справа -->
+            <div class="about_us_row">
+                <div class="about_us_image image1"></div>
+                <div class="about_us_text">
+                    <p>Наша миссия — создавать лучшие компьютеры, которые будут дарить геймерам и творческим профессионалам удовольствие от использования.
+                    Мы стремимся к инновациям, постоянно совершенствуя наши технологии и дизайн, чтобы каждый пользователь чувствовал себя частью нашего сообщества.
+                    Вдохновленные страстью к играм и творчеству, мы создаем компьютеры, которые открывают новые горизонты и позволяют достигать невероятных результатов.</p>
+                    <a href="{% url 'all_categories' %}" class="about_us_bottom_left_btn">АССОРТИМЕНТ</a>
+                </div>
+            </div>
+
+            <!-- Второй уровень: текст слева, фото справа -->
+            <div class="about_us_row">
+                <div class="about_us_text">
+                    <p>Конфигуратор системного блока поможет подобрать комплектацию ПК и проверить комплектующие на совместимость.
+                    Вы сможете экспериментировать с различными компонентами — от процессора до видеокарты — и находить оптимальные решения в зависимости от ваших требований,
+                    будь то игровая производительность, графическая работа или универсальное использование. </p>
+                    <a href="{% url 'upgrade_center' %}" class="about_us_bottom_left_btn">СОЗДАТЬ</a>
+                </div>
+                <div class="about_us_image image2"></div>
+            </div>
+
+            <!-- Третий уровень: фото слева, текст справа -->
+            <div class="about_us_row">
+                <div class="about_us_image image3"></div>
+                <div class="about_us_text">
+                    <p>Здесь наши специалисты с многолетним опытом работы подарят новую "жизнь" вашему верному стальному другу.
+                    С помощью качественных компонентов и современных технологий мы можем повысить производительность, улучшить охлаждение и продлить срок службы вашего устройства.
+                    Мы уверены, что каждый компьютер заслуживает шанса сиять, и мы готовы помочь вам в этом!</p>
+                    <a href="{% url 'repair_center' %}" class="about_us_bottom_left_btn">ДИАГНОСТИКА</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+            {% endif %}
+</main>
+    <footer class="footer">
+      <div class="footer_left">
+        <a href="#">
+          <img class="logo1" src="{% static 'img/komp.svg' %}" alt="picture">
+        </a>
+        <ul class="footer_left">
+          <li class="footer_left_text1">Я прошел все этапы работы: сам продавал, собирал и доставлял компьютеры клиентам.
+              Как никто другой знаю, как это делать правильно;
+            </li>
+          <li class="footer_left_text1">За 14 лет работы мы построили компанию №1 среди
+              производителей компьютеров премиум класса в России;
+            </li>
+          <li class="footer_left_text1">За это время мы собрали мощную команду единомышленников,
+              с которыми дружим и работаем с самого основания компании.
+            </li>
+        </ul>
+      </div>
+
+      <div class="footer_center">
+        <p class="footer_center_heading">Модели</p>
+        <ul class="footer_center_list">
+        {% for category in categories %}
+        <li class="footer_center_list-text">
+            <a class="color_a" href="{% url 'category' category.id %}">{{ category.title }}</a>
+        </li>
+        {% endfor %}
+          <li class="footer_center_list-text">
+            <a class="color_a" href="{% url 'all_categories' %}">Католог</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer_right">
+        <p class="footer_right_heading">Контакты</p>
+        <ul class="footer_right_list">
+          <li class="footer_right_list-text">
+            <a class="color_a" href="tell:+7(999)-999-99-99">+7(999)-999-99-99</a>
+          </li>
+          <li class="footer_right_list-text">
+            <a class="color_a" href="mailto:prokomp@gmail.com">prokomp@gmail.com</a>
+          </li>
+          <li class="footer_right_list-text">
+            <p class="footer_center_text">Ежедневно с 10:00 до 18:00</p>
+          </li>
+        </ul>
+       </div>
+
+       <div>
+        <form class="footer_form" action="GET">
+          <h4 class="footer_form_text">Оставьте свои данные и мы свяжемся с вами:</h4>
+          <input class="footer_input" type="email" placeholder="Email">
+          <input class="footer_input" type="number" placeholder="+7">
+          <input class="footer_input_type" type="reset" value="Отмена">
+          <input class="footer_input_type" type="submit" value="Отправить">
+
+        </form>
+       </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script>
+    function initializeSwiper() {
+        const swiperInstance = new Swiper('.swiper', {
+            direction: 'horizontal',
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+            },
+            autoplay: {
+                delay: 3000,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    }
+
+    // Вызов функции для инициализации слайдера
+    document.addEventListener('DOMContentLoaded', initializeSwiper);
+</script>
+
+
+    <script>
+        function showTooltip(tooltipId) {
+            document.getElementById(tooltipId).style.display = 'block';
+        }
+
+        function hideTooltip(tooltipId) {
+            document.getElementById(tooltipId).style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
+
+

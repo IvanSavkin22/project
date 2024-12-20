@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="card_container">
+    <form id="payment-form" class="form_item" method="post" >
+        {% csrf_token %}
+
+        <div class="form_item">
+            <label class="form_label" for="amount">Сумма к оплате:</label>
+            <input class="form_input" required type="text" id="amount" name="amount" placeholder="Например: 1000" value="{{ amount }}" readonly>
+        </div>
+
+        <div class="form_item">
+            <label class="form_label" for="phone-number">Номер телефона:</label>
+            <input class="form_input" required type="text" id="phone-number" name="phone_number" value="+7" placeholder="+7XXXXXXXXXX">
+        </div>
+
+        <div class="form_item">
+            <label class="form_label" for="full-name">Имя и фамилия:</label>
+            <input class="form_input" required type="text" id="full-name" name="full_name" placeholder="IVAN IVANOV">
+        </div>
+
+        <div class="form_item">
+            <div class="div-checkbox">
+                <input class="checkbox" type="checkbox" required id="agree" name="agree">
+                <label class="label_checkbox" for="agree">Я согласен на перевод</label>
+            </div>
+
+            <div class="form_class">
+                <a href="{% url 'certificate' %}" class="form_class1">Отмена</a>
+                <input class="form_class2" type="submit" value="Оплатить">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.getElementById('payment-form').onsubmit = function(event) {
+    event.preventDefault(); // Предотвращаем обычную отправку
+
+    // Проверяем форму
+    if (validateForm()) {
+        this.submit(); // Отправляем форму только если валидация пройдена
+    } else {
+        showErrorModal(); // Показываем модальное окно с ошибками
+    }
+};
+
+function validateForm() {
+    const errorMessages = []; // Сбрасываем массив ошибок
+
+    const fields = [
+        { element: document.getElementById('phone-number'), name: 'Номер телефона' },
+        { element: document.getElementById('full-name'), name: 'Имя и фамилия' },
+    ];
+
+    for (const field of fields) {
+        if (!field.element.value) {
+            errorMessages.push(`${field.name} не может быть пустым.`);
+            field.element.focus();
+            return false;
+        }
+    }
+
+    const agreeCheckbox = document.getElementById('agree');
+    if (!agreeCheckbox.checked) {
+        errorMessages.push("Необходимо согласие на перевод.");
+        agreeCheckbox.focus();
+        return false;
+    }
+
+    const phoneNumber = document.getElementById('phone-number').value;
+    const phoneRegex = /^\+7\d{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+        errorMessages.push("Некорректный номер телефона.");
+        document.getElementById('phone-number').focus();
+        return false;
+    }
+
+    return true; // Если все проверки пройдены
+}
+
+// Функция для показа модального окна с ошибками
+function showErrorModal() {
+    const errorModal = document.getElementById('error-modal');
+    const errorList = document.getElementById('error-list');
+    errorList.innerHTML = ''; // Очищаем предыдущие ошибки
+
+    // Добавляем новые ошибки в список
+    errorMessages.forEach((error) => {
+        const li = document.createElement('li');
+        li.textContent = error;
+        errorList.appendChild(li);
+    });
+
+    errorModal.style.display = 'flex'; // Показываем модальное окно
+}
+
+// Функция для сброса формы
+function resetForm() {
+    const form = document.getElementById('payment-form');
+    form.reset(); // Сбрасываем все поля формы
+}
+
+// Закрытие модальных окон
+document.querySelectorAll('.close-btn').forEach(function(button) {
+    button.addEventListener('click', function() {
+        document.getElementById('success-modal').style.display = 'none';
+        document.getElementById('error-modal').style.display = 'none';
+
+        // Сброс формы
+        resetForm();
+    });
+});
+</script>
+
+{% endblock %}

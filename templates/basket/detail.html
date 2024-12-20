@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+<link rel="stylesheet" href="{% static 'css/basket.css' %}">
+<h2 class="text-basket">В корзине {{ basket.basket_lines.count }} товаров</h2>
+
+<div class="container">
+    <div class="row">
+        {% for line in basket.basket_lines.all %}
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm border">
+                <img src="{% if line.product %}{{ line.product.image.url }}{% elif line.part %}{{ line.part.image.url }}{% endif %}" class="card-img-top" alt="{{ line.product.title|default:'' }} {{ line.part.name|default:'' }}">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ line.product.title|default:'' }} {{ line.part.name|default:'' }}</h5>
+                    <div class="product-specs">
+                        <p><strong>Цена:</strong> {{ line.price }} р.</p>
+                        {% if line.part.category != "pc" and line.product.category.title != "Аксессуары" %}
+                            <p><strong>Процессор:</strong> {{ line.product.processor }}</p>
+                            <p><strong>ОП:</strong> {{ line.product.ram }}</p>
+                            <p><strong>SSD:</strong> {{ line.product.ssd }}</p>
+                            <p><strong>Видеокарта:</strong> {{ line.product.graphics_card }}</p>
+                            <p><strong>Материнская плата:</strong> {{ line.product.motherboard }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="text-end">
+                        <form method="post" action="{% url 'basket_remove' line.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h3 class="text-basket">Итог: <span>{{ basket.get_total_price }} р.</span></h3>
+
+    {% if basket.basket_lines.count > 0 %}
+        <div class="text-button-off">
+            <form action="{% url 'gift_cards' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="amount" value="{{ basket.get_total_price }}">
+                <button type="submit" class="text-button">Оформить</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <p class="text-danger">Ваша корзина пуста. Пожалуйста, добавьте товары перед оформлением.</p>
+            <a href="{% url 'all_categories' %}" class="text-button">Перейти в категории</a>
+        </div>
+    {% endif %}
+</div>
+
+
+{% endblock %}

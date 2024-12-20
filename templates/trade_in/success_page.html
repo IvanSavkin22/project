@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="success-page">
+    <h1>Заявка успешно отправлена!</h1>
+
+    <p>Спасибо за вашу заявку. Мы свяжемся с вами в ближайшее время.</p>
+    <a href="{% url 'trade_in' %}">Вернуться на главную страницу</a>
+</div>
+
+{% endblock %}

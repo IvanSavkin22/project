@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    {% for service in services %}
+        <li><a href="{% url service.url %}">{{ service.name }}</a></li>
+    {% endfor %}
+
+{% endblock %}

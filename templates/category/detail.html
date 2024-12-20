@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+
+<div class="button-container">
+    <a href="{% url 'all_categories' %}" class="back-button_link">← Назад к категориям</a>
+</div>
+
+<h1>{{ active_category.title }}</h1>
+
+<div class="filter-container">
+    <button id="filter-button" class="btn btn-custom-primary" data-toggle="modal" data-target="#filter-modal">Фильтры</button>
+</div>
+
+
+<!-- Модальное окно -->
+<div id="filter-modal" class="modal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="custom-modal-dialog" role="document">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <h5 class="custom-modal-title">Фильтры</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="custom-modal-body">
+                <form id="custom-filter-form">
+                    <div class="custom-form-group">
+                        <label for="min-price">Минимальная цена</label>
+                        <input type="number" class="form-control" id="min-price" name="min_price" placeholder="0">
+                    </div>
+                    <div class="custom-form-group">
+                        <label for="max-price">Максимальная цена</label>
+                        <input type="number" class="form-control" id="max-price" name="max_price" placeholder="10000">
+                    </div>
+                    <div class="custom-form-group">
+                        <label for="sort">Сортировать по</label>
+                        <select class="form-control" id="sort" name="sort">
+                            <option value="alphabetical">Алфавиту</option>
+                            <option value="price_asc">Цене (по возрастанию)</option>
+                            <option value="price_desc">Цене (по убыванию)</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="category-id" value="1"> <!-- Убедитесь, что это значение верно -->
+                    <button type="submit" class="btn btn-custom-primary">Применить фильтры</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% if subcategories %}
+    <ul class="subcategory-list">
+        {% for subcategory in subcategories %}
+            <li>
+                <a href="{% url 'subcategory' subcategory.id %}" {% if subcategory.id == active_subcategory.id %} class="active"{% endif %}>
+                    {{ subcategory.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div id="notification" class="notification" style="display: none;"></div>
+
+<div class="row product-list">
+    {% if products %}
+        {% for product in products %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.title }}</h5>
+                        <p class="card-text">{{ product.description }}</p>
+
+                        {% if active_category.title != "Аксессуары" and active_subcategory.category.title != "Аксессуары" %}
+                            <div class="product-specs">
+                                <p><strong>Графическая карта:</strong> {{ product.graphics_card }}</p>
+                                <p><strong>Процессор:</strong> {{ product.processor }}</p>
+                                <p><strong>Материнская плата:</strong> {{ product.motherboard }}</p>
+                                <p><strong>Аккумулятор:</strong> {{ product.battery }}</p>
+                                <p><strong>Оперативная память:</strong> {{ product.ram }}</p>
+                                <p><strong>SSD:</strong> {{ product.ssd }}</p>
+                            </div>
+                        {% endif %}
+
+                        <p class="product-price">{{ product.price|floatformat:0 }} р.</p>
+                        <form class="add-to-basket-form" data-product-id="{{ product.id }}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-success add-to-basket">В корзину</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>В этой категории нет продуктов.</p>
+    {% endif %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if products.has_previous %}
+            <a class="pagination-link" href="?page=1">&laquo; Первая</a>
+            <a class="pagination-link" href="?page={{ products.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ products.number }} из {{ products.paginator.num_pages }}.
+        </span>
+
+        {% if products.has_next %}
+            <a class="pagination-link" href="?page={{ products.next_page_number }}">Следующая</a>
+            <a class="pagination-link" href="?page={{ products.paginator.num_pages }}">Последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#filter-button').on('click', function() {
+        $('#filter-modal').modal({ show: false }); // Открытие модельного окна
+
+    $('#filter-form').on('submit', function(e) {
+        e.preventDefault(); // Отмена
+
+        var minPrice = parseFloat($('#min-price').val());
+        var maxPrice = parseFloat($('#max-price').val());
+
+        // Проверка по цене
+        if (minPrice > maxPrice) {
+            alert("Минимальная цена не может превышать максимальную.");
+            return;
+        }
+
+        var formData = $(this).serialize(); // Получаем данные формы
+        var category_id = $('#category-id').val(); // индификатор категории
+
+        // AJAX-запрос для получения отфильтрованных продуктов
+        $.ajax({
+            type: 'GET',
+            url: '/category/' + category_id + '/',
+            data: formData,
+            success: function(response) {
+                // Обновляем только список продуктов
+                $('.product-list').html(response);
+                $('#filter-modal').modal('hide'); // Закрываем модальное окно после применения фильтров
+            },
+            error: function() {
+                alert('Ошибка при применении фильтров. Попробуйте позже.');
+            }
+        });
+    });
+});
+
+
+
+    // Добавление товара в корзину
+    $('.add-to-basket').on('click', function() {
+        var button = $(this);
+        var form = button.closest('form');
+        var productId = form.data('product-id');
+
+        $.ajax({
+            type: 'POST',
+            url: '/basket/add/' + productId + '/',
+            data: form.serialize(),
+            success: function(response) {
+                $('.notification').text(response.message).fadeIn().delay(3000).fadeOut();
+                $('#basket-count').text(response.total_items); // Обновление количества товаров в корзине
+            },
+            error: function() {
+                alert('Ошибка при добавлении товара в корзину. Попробуйте позже.');
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

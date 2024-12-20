@@ -1,0 +1,380 @@
+h1 {
+    text-align: center;
+    color: #ffffff;
+    margin-top: 20px;
+    margin-bottom: 35px;
+    font-size: 2.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 12px 18px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 110px;
+}
+
+.card {
+    flex: 1 1 330px;
+    max-width: 350px;
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background: linear-gradient(145deg, #484848, #484848);
+    box-shadow: 5px 5px 15px #d1d1d1, -5px -5px 15px #ffffff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+    height: 300px;
+    width: 100%;
+}
+
+.card-body {
+    flex-grow: 1;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    font-weight: bold;
+}
+
+.card-text {
+    color: #c2c2c2;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.product-specs {
+    margin-top: 12px;
+    padding: 15px;
+    background-color: rgba(31, 31, 31, 0.58);
+    border-radius: 8px;
+    text-align: left;
+}
+
+.product-specs p {
+    margin: 6px 0;
+    color: #c2c2c2;
+    font-size: 1rem;
+}
+
+.btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    transition: background-color 0.3s, transform 0.2s;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.navigation-buttons {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.navigation-buttons .btn {
+    margin: 0 10px;
+    padding: 12px 25px;
+    background-color: #6c757d;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.navigation-buttons .btn:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+.back-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    position: relative;
+    margin-top: 50px;
+}
+
+.back-button_link {
+    display: inline-block;
+    padding: 15px 30px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+    position: absolute;
+    bottom: -30px;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.notification {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    transition: opacity 0.5s ease;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+.step-links {
+    display: flex;
+    align-items: center;
+}
+
+.pagination-link {
+    margin: 0 10px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.pagination-link:hover {
+    background-color: #0056b3;
+}
+
+.current {
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.subcategory-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.subcategory-list li {
+    flex: 0 1 150px;
+    margin: 10px;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.subcategory-list li:hover {
+    transform: scale(1.05);
+}
+
+.subcategory-list a {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 10px;
+    transition: background-color 0.2s;
+}
+
+.subcategory-list a:hover {
+    background-color: #0056b3;
+}
+
+.active {
+    font-weight: bold;
+    color: #007bff;
+}
+
+
+.product-price {
+    font-size: 1.5em;
+    color: #ffffff;
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.custom-modal-dialog {
+    max-width: 600px;
+    margin: 1.75rem auto;
+    animation: slide-up 0.3s ease;
+}
+
+.custom-modal-content {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    border: none;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Заголовок */
+.custom-modal-header {
+    padding: 20px;
+    background: linear-gradient(to right, #424242, #6e6e6e);
+    color: white;
+    position: relative;
+}
+
+/* Кнопка закрытия */
+.custom-modal-header .close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.custom-modal-header .close:hover {
+    opacity: 0.8;
+}
+
+/* Тело модального окна */
+.custom-modal-body {
+    padding: 30px;
+    font-size: 16px;
+}
+
+/* Группы форм */
+.custom-form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Кнопки */
+.btn-custom-primary {
+    background-color: #727272;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-custom-primary:hover {
+    background-color: #5d5d5d;
+    transform: translateY(-2px);
+}
+
+/* Анимация появления */
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.filter-container {
+    position: relative;
+    width: 100%;
+    padding: 0px;
+}
+
+#filter-button {
+    position: absolute;
+    top: -120px;
+    right: 40px;
+    z-index: 1051;
+    background-color: #727272;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    #filter-button {
+        top: 100px;
+        right: 10px;
+    }
+}
+

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1 class="text-center">Страница регистрации</h1> <!-- Добавляем класс для центрирования заголовка -->
+
+<div class="personalization-form"> <!-- Оборачиваем форму в контейнер с классом для стилей -->
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            {{ form.username.errors }}
+            <label for="{{ form.username.id_for_label }}" class="form-label">Логин:</label>
+            {{ form.username }} <!-- Поле логина -->
+        </div>
+
+        <div class="mb-3">
+            {{ form.password_one.errors }}
+            <label for="{{ form.password_one.id_for_label }}" class="form-label">Пароль:</label>
+            {{ form.password_one }} <!-- Поле первого пароля -->
+        </div>
+
+        <div class="mb-3">
+            {{ form.password_two.errors }}
+            <label for="{{ form.password_two.id_for_label }}" class="form-label">Повторите пароль:</label>
+            {{ form.password_two }} <!-- Поле повторного пароля -->
+        </div>
+
+        <button type="submit" class="submit-button">Зарегистрироваться</button> <!-- Изменяем класс на submit-button -->
+    </form>
+</div>
+
+{% endblock %}

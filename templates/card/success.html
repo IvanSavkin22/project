@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div style="display: {% if success %}flex{% else %}none{% endif %};">
+    <div class="modal-content">
+        <h2>Оплата прошла успешно!</h2>
+        <p>Номер покупки отправлен вам по SMS</p>
+        <p>№<strong id="certificate-number">{{ certificate_number }}</strong></p>
+        <button class="close-btn" onclick="window.location.href='{% url 'home' %}'">Закрыть</button>
+    </div>
+</div>
+
+{% endblock %}
